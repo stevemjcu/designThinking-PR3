@@ -1,0 +1,8 @@
+---
+pins:
+    24:
+        name: "Bachmans Warbler"
+        file: "data/1.wav"
+    26:
+        name: "Passenger Pigeon"
+        file: "data/2.wav"
