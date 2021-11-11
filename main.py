@@ -24,11 +24,13 @@ def main():
     else:
         import RPi.GPIO as GPIO  # requires RPi OS
 
+    # setup
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
     for instance in instances:
         GPIO.setup(instance.pin, GPIO.IN)
 
+    # main loop
     while(True):
         for instance in instances:
             if (GPIO.input(instance.pin)):
