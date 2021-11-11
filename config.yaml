@@ -1,4 +1,5 @@
 ---
+use_emulator: True
 instances:
     - pin: 24
       name: "Bachmans Warbler"
