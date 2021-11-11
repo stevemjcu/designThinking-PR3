@@ -7,38 +7,30 @@ except:
     from GPIOEmulator.EmulatorGUI import GPIO
 
 def load_config():
-    '''
-    Load config from YAML
-    '''
     try:
         with open('config.yaml', 'r') as file:
             return yaml.safe_load(file)
     except yaml.YAMLError as err:
         print(err)
 
-def play_soundbite(file):
-    '''
-    Play .wav file (TODO)
-    '''
-    print("Playing " + file + "...")
+def play_track(file):
+    print("Playing " + file)
+    # TODO
 
 def main():
-    '''
-    Enter main loop
-    '''
     config = load_config()
-    pins = config['pins']
+    instances = config['instances']
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
 
-    for pin in pins.keys():
-        GPIO.setup(pin, GPIO.IN)
+    for instance in instances:
+        GPIO.setup(instance['pin'], GPIO.IN)
 
     while(True):
-        for pin, info in pins.items():
-            if (GPIO.input(pin)):
-                play_soundbite(info['file'])
+        for instance in instances:
+            if (GPIO.input(instance['pin'])):
+                play_track(instance['file'])
                 time.sleep(0.1)
 
 if __name__ == "__main__":
