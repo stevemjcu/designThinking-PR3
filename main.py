@@ -16,8 +16,8 @@ def main():
     print("Loading...")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    for instance in config.config.instances:
-        GPIO.setup(instance.pin, GPIO.IN)
+    for i in config.config.instances:
+        GPIO.setup(i.pin, GPIO.IN)
     pygame.init()
     print("...Done!")
     # run

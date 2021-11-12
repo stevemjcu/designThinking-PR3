@@ -18,5 +18,5 @@ class Config(yaml.YAMLObject):
             self.channel: int
             self.__dict__.update(entries)
 
-with open('config.yaml', 'r') as file:
-    config: Config = yaml.load(file, yaml.Loader)
+with open('config.yaml', 'r') as f:
+    config: Config = yaml.load(f, yaml.Loader)
