@@ -2,7 +2,7 @@ import time
 import yaml
 
 class Instance(yaml.YAMLObject):
-    yaml_tag: str = '!Instance'
+    yaml_tag: str = u'!Instance'
     name: str
     file: str
     pin: int
@@ -11,18 +11,12 @@ class Instance(yaml.YAMLObject):
         self.__dict__.update(entries)
 
 class Config(yaml.YAMLObject):
-    yaml_tag: str = '!Config'
+    yaml_tag: str = u'!Config'
     emulate: bool
     instances: list[Instance]
 
     def __init__(self, **entries) -> None:
         self.__dict__.update(entries)
-
-def instance_constructor(loader: yaml.SafeLoader, node: yaml.nodes.MappingNode) -> Instance:
-    return Instance(**loader.construct_mapping(node))
-
-def config_constructor(loader: yaml.SafeLoader, node: yaml.nodes.MappingNode) -> Config:
-    return Config(**loader.construct_mapping(node))
 
 def play_track(file: str):
     print("Playing " + file)
@@ -30,9 +24,7 @@ def play_track(file: str):
 
 def main() -> None:
     with open('config.yaml', 'r') as file:
-        loader = yaml.SafeLoader
-        loader.add_constructor("!Instance", instance_constructor)
-        loader.add_constructor("!Config", config_constructor)
+        loader = yaml.Loader
         config: Config = yaml.load(file, loader)
 
     if(config.emulate):
