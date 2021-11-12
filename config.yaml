@@ -3,10 +3,12 @@
 emulate: True
 instances:
     - !Instance
-      name: "Bachmans Warbler"
-      file: "data/1.wav"
+      name: "Bachman's Warbler"
+      file: "data/bachman's-warbler.wav"
       pin: 24
+      channel: 0
     - !Instance
-      name: "Passenger Pigeon"
-      file: "data/2.wav"
+      name: "Dusky Seaside Sparrow"
+      file: "data/dusky-seaside-sparrow.wav"
       pin: 26
+      channel: 1

@@ -1,3 +1,4 @@
+import pygame
 import time
 import yaml
 
@@ -11,20 +12,22 @@ class Config(yaml.YAMLObject):
 
     class Instance(yaml.YAMLObject):
         yaml_tag = u'!Instance'
-        
+
         def __init__(self, **entries):
             self.name: str
             self.file: str
             self.pin: int
+            self.channel: int
             self.__dict__.update(entries)
 
-def play_soundbite(file: str):
-    print("Playing " + file)
-    # TODO: implement!
+def play_soundbite(path: str, channel: int):
+    sound = pygame.mixer.Sound(path)
+    pygame.mixer.Channel(channel).play(sound)
 
 def main():
     with open('config.yaml', 'r') as file:
-        config: Config = yaml.load(file, yaml.Loader)
+        loader = yaml.Loader
+        config: Config = yaml.load(file, loader)
 
     if(config.emulate):
         from GPIOEmulator.EmulatorGUI import GPIO
@@ -35,12 +38,18 @@ def main():
     GPIO.setwarnings(False)
     for instance in config.instances:
         GPIO.setup(instance.pin, GPIO.IN)
+    pygame.init()
 
-    while(True):
-        for instance in config.instances:
-            if (GPIO.input(instance.pin)):
-                play_soundbite(instance.file)
-                time.sleep(0.1)
+    try:
+        while(True):
+            for instance in config.instances:
+                if (GPIO.input(instance.pin)):
+                    print("Playing " + instance.name + "...")
+                    play_soundbite(instance.file, instance.channel)
+                    time.sleep(0.1)
+    finally:
+        GPIO.cleanup()
+        pygame.quit()
 
 if __name__ == "__main__":
     main()
