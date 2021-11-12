@@ -1,31 +1,30 @@
 import time
 import yaml
 
-class Instance(yaml.YAMLObject):
-    yaml_tag = u'!Instance'
-    name: str
-    file: str
-    pin: int
-
-    def __init__(self, **entries):
-        self.__dict__.update(entries)
-
 class Config(yaml.YAMLObject):
     yaml_tag = u'!Config'
-    emulate: bool
-    instances: list[Instance]
 
     def __init__(self, **entries):
+        self.emulate: bool
+        self.instances: list[self.Instance]
         self.__dict__.update(entries)
 
-def play_track(file: str):
+    class Instance(yaml.YAMLObject):
+        yaml_tag = u'!Instance'
+        
+        def __init__(self, **entries):
+            self.name: str
+            self.file: str
+            self.pin: int
+            self.__dict__.update(entries)
+
+def play_soundbite(file: str):
     print("Playing " + file)
     # TODO: implement!
 
 def main():
     with open('config.yaml', 'r') as file:
-        loader = yaml.Loader
-        config: Config = yaml.load(file, loader)
+        config: Config = yaml.load(file, yaml.Loader)
 
     if(config.emulate):
         from GPIOEmulator.EmulatorGUI import GPIO
@@ -40,7 +39,7 @@ def main():
     while(True):
         for instance in config.instances:
             if (GPIO.input(instance.pin)):
-                play_track(instance.file)
+                play_soundbite(instance.file)
                 time.sleep(0.1)
 
 if __name__ == "__main__":
