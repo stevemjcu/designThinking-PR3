@@ -30,7 +30,7 @@ def main():
     if(config.emulate):
         from GPIOEmulator.EmulatorGUI import GPIO
     else:
-        import RPi.GPIO as GPIO  # requires RPi OS
+        import RPi.GPIO as GPIO
 
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
