@@ -1,7 +1,6 @@
 import config
 import pygame
 import time
-import yaml
 
 if(config.config.emulate):
     from GPIOEmulator.EmulatorGUI import GPIO
@@ -26,7 +25,7 @@ def main():
         while(True):
             for i in config.config.instances:
                 if (GPIO.input(i.pin)):
-                    print("Playing " + i.name + "!")
+                    print("Playing: " + i.name)
                     play_soundbite(i.file, i.channel)
                     time.sleep(0.25)
     finally:
