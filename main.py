@@ -2,27 +2,27 @@ import time
 import yaml
 
 class Instance(yaml.YAMLObject):
-    yaml_tag: str = u'!Instance'
+    yaml_tag = u'!Instance'
     name: str
     file: str
     pin: int
 
-    def __init__(self, **entries) -> None:
+    def __init__(self, **entries):
         self.__dict__.update(entries)
 
 class Config(yaml.YAMLObject):
-    yaml_tag: str = u'!Config'
+    yaml_tag = u'!Config'
     emulate: bool
     instances: list[Instance]
 
-    def __init__(self, **entries) -> None:
+    def __init__(self, **entries):
         self.__dict__.update(entries)
 
 def play_track(file: str):
     print("Playing " + file)
     # TODO: implement!
 
-def main() -> None:
+def main():
     with open('config.yaml', 'r') as file:
         loader = yaml.Loader
         config: Config = yaml.load(file, loader)
