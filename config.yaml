@@ -1,9 +1,12 @@
 ---
-use_emulator: True
+!Config
+emulate: True
 instances:
-    - pin: 24
+    - !Instance
       name: "Bachmans Warbler"
       file: "data/1.wav"
-    - pin: 26
+      pin: 24
+    - !Instance
       name: "Passenger Pigeon"
       file: "data/2.wav"
+      pin: 26

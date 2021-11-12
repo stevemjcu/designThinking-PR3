@@ -1,38 +1,52 @@
 import time
 import yaml
 
-class Instance():
+class Instance(yaml.YAMLObject):
+    yaml_tag: str = '!Instance'
     name: str
     file: str
     pin: int
 
-    def __init__(self, **entries):
+    def __init__(self, **entries) -> None:
         self.__dict__.update(entries)
 
-def play_track(file):
+class Config(yaml.YAMLObject):
+    yaml_tag: str = '!Config'
+    emulate: bool
+    instances: list[Instance]
+
+    def __init__(self, **entries) -> None:
+        self.__dict__.update(entries)
+
+def instance_constructor(loader: yaml.SafeLoader, node: yaml.nodes.MappingNode) -> Instance:
+    return Instance(**loader.construct_mapping(node))
+
+def config_constructor(loader: yaml.SafeLoader, node: yaml.nodes.MappingNode) -> Config:
+    return Config(**loader.construct_mapping(node))
+
+def play_track(file: str):
     print("Playing " + file)
     # TODO: implement!
 
-def main():
+def main() -> None:
     with open('config.yaml', 'r') as file:
-        data_map = yaml.safe_load(file)
-        use_emulator = bool(data_map['use_emulator'])
-        instances = [Instance(**i) for i in data_map['instances']]
+        loader = yaml.SafeLoader
+        loader.add_constructor("!Instance", instance_constructor)
+        loader.add_constructor("!Config", config_constructor)
+        config: Config = yaml.load(file, loader)
 
-    if(use_emulator):
+    if(config.emulate):
         from GPIOEmulator.EmulatorGUI import GPIO
     else:
         import RPi.GPIO as GPIO  # requires RPi OS
 
-    # setup
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    for instance in instances:
+    for instance in config.instances:
         GPIO.setup(instance.pin, GPIO.IN)
 
-    # main loop
     while(True):
-        for instance in instances:
+        for instance in config.instances:
             if (GPIO.input(instance.pin)):
                 play_track(instance.file)
                 time.sleep(0.1)
