@@ -23,6 +23,7 @@ def main():
     GPIO.setwarnings(False)
     for i in config.instances:
         GPIO.setup(i.pin, GPIO.IN)
+        playing[i.name] = False
     print("...Done!")
     # run
     try:
