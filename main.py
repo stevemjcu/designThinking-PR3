@@ -1,8 +1,8 @@
-import config
+from config import config
 import pygame
 import time
 
-if(config.config.emulate):
+if(config.emulate):
     from GPIOEmulator.EmulatorGUI import GPIO
 else:
     import RPi.GPIO as GPIO
@@ -21,14 +21,13 @@ def main():
     print("Loading...")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    for i in config.config.instances:
-        playing[i.name] = False
+    for i in config.instances:
         GPIO.setup(i.pin, GPIO.IN)
     print("...Done!")
     # run
     try:
         while(True):
-            for i in config.config.instances:
+            for i in config.instances:
                 if (GPIO.input(i.pin)):
                     if(not playing[i.name]):
                         playing[i.name] = True
