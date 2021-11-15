@@ -1,8 +1,8 @@
-import config
+from config import config
 import pygame
 import time
 
-if(config.config.emulate):
+if(config.emulate):
     from GPIOEmulator.EmulatorGUI import GPIO
 else:
     import RPi.GPIO as GPIO
@@ -12,18 +12,18 @@ def play_soundbite(path: str, channel: int):
     pygame.mixer.Channel(channel).play(sound)
 
 def main():
+    pygame.init()
     # load
     print("Loading...")
     GPIO.setmode(GPIO.BCM)
     GPIO.setwarnings(False)
-    for i in config.config.instances:
+    for i in config.instances:
         GPIO.setup(i.pin, GPIO.IN)
-    pygame.init()
     print("...Done!")
     # run
     try:
         while(True):
-            for i in config.config.instances:
+            for i in config.instances:
                 if (GPIO.input(i.pin)):
                     print("Playing: " + i.name)
                     play_soundbite(i.file, i.channel)
