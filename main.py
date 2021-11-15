@@ -31,13 +31,12 @@ def main():
             for i in config.instances:
                 if (GPIO.input(i.pin)):
                     if(not playing[i.name]):
-                        playing[i.name] = True
-                        print("Playing: " + i.name)
+                        print(i.name)
                         play_soundbite(i.file, i.channel, -1)
+                        playing[i.name] = True
                     else:
-                        playing[i.name] = False
-                        print("Stopping: " + i.name)
                         stop_soundbite(i.channel)
+                        playing[i.name] = False
                     time.sleep(0.25)
     finally:
         GPIO.cleanup()
