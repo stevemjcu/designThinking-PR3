@@ -1,0 +1,19 @@
+---
+!Config
+emulate: True
+instances:
+    - !Instance
+      name: "Bachman's Warbler"
+      file: "data/bachman's-warbler.wav"
+      pin: 14
+      channel: 0
+    - !Instance
+      name: "Dusky Seaside Sparrow"
+      file: "data/dusky-seaside-sparrow.wav"
+      pin: 15
+      channel: 1
+    - !Instance
+      name: "Kaua`i `O`o"
+      file: "data/kaua`i-`o`o.wav"
+      pin: 18
+      channel: 2

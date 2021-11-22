@@ -1,46 +1,36 @@
+import adafruit_mpr121
+import board
+import busio
 from config import config
 import pygame
 import time
 
-if(config.emulate):
-    from GPIOEmulator.EmulatorGUI import GPIO
-else:
-    import RPi.GPIO as GPIO
+i2c = busio.I2C(board.SCL, board.SDA)
+mpr121 = adafruit_mpr121.MPR121(i2c)
 
 def play_soundbite(path: str, channel: int, loops: int = 0):
-    sound = pygame.mixer.Sound(path)
-    pygame.mixer.Channel(channel).play(sound, loops)
+    pygame.mixer.Channel(channel).play(pygame.mixer.Sound(path), loops)
 
 def stop_soundbite(channel: int):
     pygame.mixer.Channel(channel).stop()
 
 def main():
     pygame.init()
-    playing = {}
-    # load
-    print("Loading...")
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setwarnings(False)
+    is_playing = {}
     for i in config.instances:
-        GPIO.setup(i.pin, GPIO.IN)
-        playing[i.name] = False
-    print("...Done!")
-    # run
-    try:
-        while(True):
-            for i in config.instances:
-                if (GPIO.input(i.pin)):
-                    if(not playing[i.name]):
-                        print(i.name)
-                        play_soundbite(i.file, i.channel, -1)
-                        playing[i.name] = True
-                    else:
-                        stop_soundbite(i.channel)
-                        playing[i.name] = False
-                    time.sleep(0.25)
-    finally:
-        GPIO.cleanup()
-        pygame.quit()
+        is_playing[i.name] = False
+    while(True):
+        for i in config.instances:
+            if (mpr121[i.input].value):
+                if(not is_playing[i.name]):
+                    print('Playing ' + i.name)
+                    play_soundbite(i.file, i.output, -1)
+                    is_playing[i.name] = True
+                else:
+                    print('Stopping ' + i.name)
+                    stop_soundbite(i.output)
+                    is_playing[i.name] = False
+                time.sleep(0.25)
 
 if __name__ == "__main__":
     main()
