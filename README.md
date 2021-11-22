@@ -5,7 +5,8 @@ For use with the [MPR121 12-Key Capacitive Touch Sensor][2] on a Raspberry Pi.
 ## Setup
 
 - Follow the steps at [CircuitPython on Raspberry Pi Setup][1]
-- Install the adafruit-circuitpython-mpr121, pygame, and pyyaml Python packages
+- Install the adafruit-circuitpython-mpr121 Python package
+- Additionally, install the pygame and pyyaml Python packages
 
 ## Execution
 
